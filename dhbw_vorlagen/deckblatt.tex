@@ -1,16 +1,15 @@
-% HIER EDITIEREN: 
 % Typ der Arbeit (für Deckblatt und ehrenwörtliche Erklärung)
-% - bitte Zutreffendes auswählen
 \newcommand{\typMeinerArbeit}{1. Projektarbeit} 
-%\newcommand{\typMeinerArbeit}{2. Projektarbeit} 
-%\newcommand{\typMeinerArbeit}{Seminararbeit} 
-%\newcommand{\typMeinerArbeit}{Bachelorarbeit} 
+% \newcommand{\typMeinerArbeit}{2. Projektarbeit} 
+% \newcommand{\typMeinerArbeit}{Seminararbeit} 
+% \newcommand{\typMeinerArbeit}{Bachelorarbeit}
+% \newcommand{\typMeinerArbeit}{Benutzerdefiniertes Format} 
 
 % Thema der Arbeit (für ehrenwörtliche Erklärung)
 \newcommand{\themaMeinerArbeit}{Beispiel}
 \newcommand{\unterThemaMeinerArbeit}{Beispiel}
 
-%Name des Autors
+% Name des Autors
 \newcommand{\autorDerArbeit}{}
 
 \thispagestyle{empty}
@@ -19,10 +18,8 @@
 \begin{center}	
 ~\vspace{0mm}
 
-% HIER EDITIEREN: Titel der Arbeit
 {\sffamily
 \LARGE  
-% \Large  % bei sehr langen Titeln ggf. etwas kleinere Schriftart wählen
 \textbf{\themaMeinerArbeit}
 
 \bigskip
@@ -32,12 +29,11 @@
 
 \vspace{15mm}
 
-% HIER EDITIEREN
 {\Large \typMeinerArbeit}
 
 \vspace{1cm}
 
-% HIER ggf. EDITIEREN
+% Datum festlegen
 vorgelegt am \today 
 
 \vspace{15mm}
@@ -48,7 +44,7 @@ Fakultät Wirtschaft
 Studiengang Wirtschaftsinformatik
 \medskip
 
-% HIER EDITIEREN: Kurs eintragen
+% Kurs eintragen
 Kurs WWI2018F 
 
 \vspace{10mm}
@@ -57,7 +53,6 @@ von
 
 \vspace{10mm}
 
-% HIER EDITIEREN: Vorname und Name eintragen 
 {\large\textsc{\autorDerArbeit}}
 
 \vspace{10mm}
@@ -65,7 +60,7 @@ von
 
 \vfill
 
-% Name der Betreuerin
+% Name der Betreuerin und des Studiengangsleiters eintragen
 \begin{tabular}{ll}
 Betreuerin in der Ausbildungsstätte: & DHBW Stuttgart: \\
 \hspace{0.4\linewidth} & \\
@@ -81,19 +76,20 @@ Unterschrift der Betreuerin \\
 
 
 \vspace{1cm}
-%(etwas Platz für die Unterschrift des Betreuers aus der Ausbildungsstätte)
+
 \end{spacing}
 
-% falls ein Sperrvermerk erforderlich ist: 
-%\begin{center}
-%\small
-%\textbf{Sperrvermerk}:
-%Der Inhalt dieser Arbeit darf weder als Ganzes noch in Auszügen \\
-%Personen außerhalb des Prüfungsprozesses und des Evaluationsverfahrens zugänglich gemacht werden, sofern keine anders lautende Genehmigung der Ausbildungsstätte vorliegt. 
-%\end{center}
+% Wenn ein Sperrvermerk erforderlich ist, die Nachfolgenden Zeilen auskommentieren
+\cleardoublepage
+\begin{center}
+\small
+\textbf{Sperrvermerk}:
+Der Inhalt dieser Arbeit darf weder als Ganzes noch in Auszügen \\
+Personen außerhalb des Prüfungsprozesses und des Evaluationsverfahrens zugänglich gemacht werden, sofern keine anders lautende Genehmigung der Ausbildungsstätte vorliegt. 
+\end{center}
 
 
-% HIER EDITIEREN: Meta-Daten für PDF-Datei
+% Metadaten für die PDF Datei
 \hypersetup{pdftitle={\themaMeinerArbeit}}
 \hypersetup{pdfauthor={\autorDerArbeit}}
-\hypersetup{pdfsubject={\typMeinerArbeit DHBW Stuttgart 2015}}
+\hypersetup{pdfsubject={\typMeinerArbeit DHBW Stuttgart 2019}}
