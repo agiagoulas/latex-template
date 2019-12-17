@@ -1,0 +1,24 @@
+name: Compile LaTeX PDF
+on: [push]
+jobs:
+  compile:
+
+    name: Compile LaTeX to PDF
+    runs-on: ubuntu-latest
+    container: tianon/latex
+
+    steps:
+      - name: Checkout the repository code
+        uses: actions/checkout@v1
+
+      - name: Create output directory
+        run: mkdir -p ./output
+
+      - name: Compile the master file
+        run: shell_escape=t latexmk -pdf -jobname=./output/build master.tex;
+
+      - name: Upload compiled pdf file as artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: master
+          path: ./output/build.pdf
