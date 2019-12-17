@@ -87,7 +87,7 @@ done
 
 new_topic "${GOLD}" "[Cloning up the project]"
 cecho "${GOLD}Cloning" " the latest latex template to ${GOLD}${BU}${PROJECT_NAME}.\n"
-if ! git config credential.helper 2> /dev/null; then
+if ! git config credential.helper &> /dev/null; then
     cecho "┏ You do not have the git ${GOLD}credential helper" " enabled!\n"
     cecho "┃ The ${GOLD}credential helper" " allows you to ${GOLD}store" " your ${GOLD}git remote credentials" ".\n"
     if cecho_yes_no "┃ Do you want to enabled it" " ${DARK_GREEN}[y/n]" "? "; then

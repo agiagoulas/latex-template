@@ -64,6 +64,14 @@ function new_module_info() {
     echo -e "${RESET}"
 }
 
+function requireGitConfig() {
+    if ! git config $1 &> /dev/null; then
+        NEW_VALUE=""
+        cecho "You do not have your git ${LIGHT_RED}$1" " configured. Please enter it right now: "
+        read -r NEW_VALUE
+        git config "$1" "${NEW_VALUE}"
+    fi
+}
 function commitChanges() {
     git add .
 
@@ -99,6 +107,9 @@ function _installModule() {
 
     cecho "${GREEN}Done!\n"
 }
+
+requireGitConfig "user.name"
+requireGitConfig "user.email"
 
 if ! $(git diff-index --quiet HEAD --); then
     cecho "${LIGHT_RED}You have non-committed changes in your project.\n"
