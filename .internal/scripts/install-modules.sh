@@ -33,6 +33,20 @@ function cecho() {
     echo -en "$output_string"
 }
 
+function print_box_char() {
+   last=$(($2 - 1))
+
+    if [[ $2 == 1 ]]; then
+        cecho "${BOLD}["
+        return 0
+    fi
+
+    if [[ $1 == 0 ]]; then cecho "┏";
+    elif [[ $1 == ${last} ]]; then cecho "┗";
+    else cecho "┃";
+    fi
+}
+
 function cecho_yes_no() {
     cecho "$@"
     answer=""
@@ -75,10 +89,7 @@ function requireGitConfig() {
 function commitChanges() {
     git add .
 
-    echo "\
-    Install module $1
-
-    This commit installs the $1 module onto the latex project." > _commit.txt
+    echo -en "Install module $1\n\nThis commit installs the $1 module onto the latex project.\n\n$2" > _commit.txt
     git commit --file _commit.txt
     rm -f _commit.txt
 }
@@ -86,10 +97,19 @@ function commitChanges() {
 function _installModule() {
     setup_module_vars
     source "$1/init.sh"
-    IFS=',' read -r -a array <<< "${MODULE_DEPENDENCIES}"
+    IFS=',' read -r -a MODULE_DEPENDENCY_ARRAY <<< "${MODULE_DEPENDENCIES}"
+    IFS=$'\n' read -rd '' -a MODULE_DESCRIPTION_ARRAY <<<"$MODULE_DESCRIPTION"
 
     new_module_info "${GREEN}" "${MODULE_NAME}"
-    cecho "${GREEN}Description: \n" "${MODULE_DESCRIPTION}"
+
+    cecho "${GREEN}Description: \n"
+    MODULE_DESCRIPTION_LENGTH=${#MODULE_DESCRIPTION_ARRAY[@]}
+    for (( i = 0; i < $MODULE_DESCRIPTION_LENGTH; ++i )); do
+        print_box_char ${i} ${MODULE_DESCRIPTION_LENGTH}
+        cecho " ${MODULE_DESCRIPTION_ARRAY[$i]}\n"
+    done
+
+
     if [[ ! -z "${MODULE_DEPENDENCIES}" ]]; then
         cecho "${GREEN}Dependencies: ${MODULE_DEPENDENCIES}\n"
     fi
@@ -103,7 +123,7 @@ function _installModule() {
     cecho "${GREEN}Installing...\n"
 
     install "$(pwd)" "$1" || return 1
-    commitChanges "${MODULE_NAME}"
+    commitChanges "${MODULE_NAME}" "${MODULE_DESCRIPTION}"
 
     cecho "${GREEN}Done!\n"
 }

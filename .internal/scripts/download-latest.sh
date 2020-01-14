@@ -86,7 +86,7 @@ while ! (cecho_yes_no "Do you want to use ${AQUA}${BU}${PROJECT_NAME}" " as your
 done
 
 new_topic "${GOLD}" "[Cloning up the project]"
-cecho "${GOLD}Cloning" " the latest latex template to ${GOLD}${BU}${PROJECT_NAME}.\n"
+cecho "${GOLD}Cloning" " the latest latex template to ${GOLD}${BU}${PROJECT_NAME}...\n"
 if ! git config credential.helper &> /dev/null; then
     cecho "┏ You do not have the git ${GOLD}credential helper" " enabled!\n"
     cecho "┃ The ${GOLD}credential helper" " allows you to ${GOLD}store" " your ${GOLD}git remote credentials" ".\n"
@@ -112,5 +112,8 @@ new_topic "${GREEN}" "[Modules]"
 if ! cecho_yes_no "Do you want to install any extra ${GREEN}modules" " ${DARK_GREEN}[y/n]" "? "; then
     return 0
 fi
-git pull upstream "${GIT_DEFAULT_BRANCH}" &> /dev/null
+cecho "${GREEN}Pulling module branch...\n"
+git fetch upstream "${GIT_DEFAULT_BRANCH}"
+git merge -q "upstream/${GIT_DEFAULT_BRANCH}"
+cecho "${GREEN}Done!\n"
 ./.internal/scripts/install-modules.sh
