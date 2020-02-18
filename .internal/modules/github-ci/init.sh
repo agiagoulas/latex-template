@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-MODULE_NAME="GitHub CI"
-MODULE_DESCRIPTION="Installs a simple github actions workflow for projects hosted on github.
+export MODULE_NAME="GitHub CI"
+export MODULE_DESCRIPTION="Installs a simple github actions workflow for projects hosted on github.
 This workflow will automatically compile the latex project and provide the pdf as an artifact."
 
 function install() {

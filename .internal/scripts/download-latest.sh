@@ -85,14 +85,14 @@ while ! (cecho_yes_no "Do you want to use ${AQUA}${BU}${PROJECT_NAME}" " as your
     read -r PROJECT_NAME
 done
 
-new_topic "${GOLD}" "[Cloning up the project]"
+new_topic "${GOLD}" "[Cloning the project]"
 cecho "${GOLD}Cloning" " the latest latex template to ${GOLD}${BU}${PROJECT_NAME}...\n"
-if ! git config credential.helper &> /dev/null; then
-    cecho "┏ You do not have the git ${GOLD}credential helper" " enabled!\n"
-    cecho "┃ The ${GOLD}credential helper" " allows you to ${GOLD}store" " your ${GOLD}git remote credentials" ".\n"
-    if cecho_yes_no "┃ Do you want to enabled it" " ${DARK_GREEN}[y/n]" "? "; then
+if ! git config credential.helper &>/dev/null; then
+    cecho "┏ You do not have the git ${GOLD}credential helper"   " enabled!\n"
+    cecho "┃ The ${GOLD}credential helper"   " allows you to ${GOLD}store" " your ${GOLD}git remote credentials" ".\n"
+    if cecho_yes_no "┃ Do you want to enabled it"   " ${DARK_GREEN}[y/n]" "? "; then
         git config --global credential.helper store
-        cecho "┗ ${DARK_GREEN}Enabled" " the git ${GOLD}credential helper" " globally!\n"
+        cecho "┗ ${DARK_GREEN}Enabled"   " the git ${GOLD}credential helper" " globally!\n"
     else
         cecho "┗ Did not enable git credential helper.\n"
     fi
