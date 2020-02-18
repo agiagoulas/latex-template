@@ -5,7 +5,7 @@ jobs:
 
     name: Compile LaTeX to PDF
     runs-on: ubuntu-latest
-    container: tianon/latex
+    container: aergus/latex
 
     steps:
       - name: Checkout the repository code
@@ -17,8 +17,11 @@ jobs:
       - name: Compile the master file
         run: shell_escape=t latexmk -pdf -jobname=./output/build master.tex;
 
+      - name: Copy compiled output pdf
+        run: cp output/build.pdf master.pdf
+
       - name: Upload compiled pdf file as artifact
         uses: actions/upload-artifact@v1
         with:
           name: master
-          path: ./output/build.pdf
+          path: master.pdf
