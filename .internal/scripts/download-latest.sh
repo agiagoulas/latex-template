@@ -79,7 +79,12 @@ else
 fi
 
 new_topic "${AQUA}" "[Project Name]"
-PROJECT_NAME=$(echo "${REMOTE_GIT_REPOSITORY:=latex-template.git}" | rev | cut -d '/' -f 1 | cut -c 5- | rev)
+PROJECT_NAME=$(echo "${REMOTE_GIT_REPOSITORY:=latex-project.git}" | rev | cut -d '/' -f 1 | cut -c 5- | rev)
+
+if [[ -z "${REMOTE_GIT_REPOSITORY}" ]]; then # If no git repository is provided, ask the name instantly
+    cecho "Please provide the ${AQUA}${BU}project name" ": "
+    read -r PROJECT_NAME
+fi
 while ! (cecho_yes_no "Do you want to use ${AQUA}${BU}${PROJECT_NAME}" " as your project name" " ${DARK_GREEN}[y/n]" "? "); do
     cecho "Please provide the ${AQUA}${BU}project name" ": "
     read -r PROJECT_NAME
@@ -88,11 +93,11 @@ done
 new_topic "${GOLD}" "[Cloning the project]"
 cecho "${GOLD}Cloning" " the latest latex template to ${GOLD}${BU}${PROJECT_NAME}...\n"
 if ! git config credential.helper &>/dev/null; then
-    cecho "┏ You do not have the git ${GOLD}credential helper"   " enabled!\n"
-    cecho "┃ The ${GOLD}credential helper"   " allows you to ${GOLD}store" " your ${GOLD}git remote credentials" ".\n"
-    if cecho_yes_no "┃ Do you want to enabled it"   " ${DARK_GREEN}[y/n]" "? "; then
+    cecho "┏ You do not have the git ${GOLD}credential helper"     " enabled!\n"
+    cecho "┃ The ${GOLD}credential helper"     " allows you to ${GOLD}store" " your ${GOLD}git remote credentials" ".\n"
+    if cecho_yes_no "┃ Do you want to enabled it"     " ${DARK_GREEN}[y/n]" "? "; then
         git config --global credential.helper store
-        cecho "┗ ${DARK_GREEN}Enabled"   " the git ${GOLD}credential helper" " globally!\n"
+        cecho "┗ ${DARK_GREEN}Enabled"     " the git ${GOLD}credential helper" " globally!\n"
     else
         cecho "┗ Did not enable git credential helper.\n"
     fi

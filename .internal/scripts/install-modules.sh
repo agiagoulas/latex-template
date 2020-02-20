@@ -136,22 +136,24 @@ function _installModule() {
     _readModuleVars "$1"
 
     MODULE_DESCRIPTION=$(fmt -w 72 < <(printf "%s\n" "$MODULE_DESCRIPTION"))
-    IFS=$'\n' read -rd '' -a MODULE_DESCRIPTION_ARRAY <<< "${MODULE_DESCRIPTION}"
+    IFS=$'\n' read -rd '' -a MODULE_DESCRIPTION_ARRAY <<<"${MODULE_DESCRIPTION}"
 
-    new_module_info "${GREEN}" "${MODULE_NAME}"
+    IFS=$',' read -r -a MODULE_DEPENDENCIES_ARRAY <<<"${MODULE_DEPENDENCIES}"
 
-    cecho "${GREEN}Description: \n"
-    MODULE_DESCRIPTION_LENGTH=${#MODULE_DESCRIPTION_ARRAY[@]}
-    for ((i = 0; i < MODULE_DESCRIPTION_LENGTH; ++i)); do
-        print_box_char ${i} "${MODULE_DESCRIPTION_LENGTH}"
-        cecho " ${MODULE_DESCRIPTION_ARRAY[$i]}\n"
-    done
+    if [[ ! $2 == "force" ]]; then # If it isn't a forced installation, print module info
+        new_module_info "${GREEN}" "${MODULE_NAME}"
 
-    if [[ -n "${MODULE_DEPENDENCIES}" ]]; then
-        cecho "${GREEN}Dependencies: ${MODULE_DEPENDENCIES}\n"
-    fi
+        cecho "${GREEN}Description: \n"
+        MODULE_DESCRIPTION_LENGTH=${#MODULE_DESCRIPTION_ARRAY[@]}
+        for ((i = 0; i < MODULE_DESCRIPTION_LENGTH; ++i)); do
+            print_box_char ${i} "${MODULE_DESCRIPTION_LENGTH}"
+            cecho " ${MODULE_DESCRIPTION_ARRAY[$i]}\n"
+        done
 
-    if [[ ! $2 == "force" ]]; then
+        if [[ -n "${MODULE_DEPENDENCIES}" ]]; then
+            cecho "${GREEN}Dependencies: ${MODULE_DEPENDENCIES_ARRAY[*]}\n"
+        fi
+
         if ! cecho_yes_no "Do you want to ${BOLD}install" " ${GREEN}${MODULE_NAME} module" " ${DARK_GREEN}[y/n]" "? "; then
             return 0
         fi
@@ -159,8 +161,43 @@ function _installModule() {
 
     cecho "${GREEN}Installing...\n"
 
-    install "$(pwd)" "$1" || return 1
-    commitChanges "${MODULE_NAME}" "${MODULE_DESCRIPTION}"
+    # Store root project values
+    local local_module_name="${MODULE_NAME}"
+    local module_description="${MODULE_DESCRIPTION}"
+    local module_dependencies="${MODULE_DEPENDENCIES}"
+    local module_path="$1"
+
+    for dep in "${MODULE_DEPENDENCIES_ARRAY[@]}"; do
+        if [[ -z "${dep}" ]]; then continue; fi # Catch somehow empty dependencies
+
+        cecho "${GREEN}Looking up dependency: ${BU}${dep}" "${GREEN}..."
+        installed=0
+        for ((i = 0; i < COMPLETE_MODULE_LENGTH; ++i)); do
+            cur_module="${MODULES[i]}"
+            if [[ -z "${cur_module}" ]]; then continue; fi # Catch already used modules
+
+            cur_module_dir=$(_splitBy 1 "${MODULES[i]}") # Get path
+            module_id=${cur_module_dir##*/} # only last path
+
+            cecho "Matching ${module_id} against ${dep}"
+
+            if [[ "${module_id}" == "${dep}" ]]; then
+                cecho "${GREEN}Found" "!\n"
+
+                _installModule "${cur_module_dir}" "force"
+                unset -v 'MODULES[i]'
+                MODULE_LENGHT=$((MODULE_LENGHT - 1))
+                installed="1"
+                break
+            fi
+        done
+
+        if [[ "${installed}" -eq "0" ]]; then cecho "${LIGHT_RED}Not found" "!\n"; fi
+    done
+
+    _readModuleVars "$module_path"
+    install "$(pwd)" "$module_path" || return 1
+    commitChanges "${local_module_name}" "${module_description}"
 
     cecho "${GREEN}Done!\n"
 }
@@ -193,19 +230,24 @@ for CURRENT_MODULE in "${MODULE_ROOT}"/*; do
 done
 
 COMPLETE_MODULE_LENGTH=${#MODULES[@]}
+MODULE_LENGHT=${#MODULES[@]}
 
 while true; do
+    realI=0
+
     cecho "${GREEN}What" " ${DARK_GREEN}modules" " ${GREEN}do you want to install" "?\n"
 
     for ((i = 0; i < COMPLETE_MODULE_LENGTH; ++i)); do
         if [[ -z "${MODULES[i]}" ]]; then continue; fi
 
         start_char="┣"
-        if [[ ${i} -eq "0" ]]; then start_char="┏";    fi
-        if [[ ${i} -eq "$((${#MODULES[@]} - 1))" ]]; then start_char="┗";  fi
-        if [[ ${#MODULES[@]} == 1 ]]; then start_char="━";   fi
+        if [[ ${realI} -eq "0" ]]; then start_char="┏";                          fi
+        if [[ ${realI} -eq "$((MODULE_LENGHT - 1))" ]]; then start_char="┗";                        fi
+        if [[ ${#MODULES[@]} == 1 ]]; then start_char="━";                         fi
 
         cecho " ${GRAY}${start_char}" "${DARK_GREEN}$(_splitBy 0 "${MODULES[i]}")" " (${i})\n"
+
+        realI=$((realI + 1))
     done
 
     # If 1 is returned, break. This means "end" was entered.
@@ -227,6 +269,8 @@ while true; do
 
     _installModule "$(_splitBy 1 "${TARGET_MODULE}")"
     unset -v 'MODULES[CECHO_NUMBER_OR_END_OUT]'
+    MODULE_LENGHT=$((MODULE_LENGHT - 1))
+
     if [[ ${#MODULES[@]} == 0 ]]; then
         break
     fi
