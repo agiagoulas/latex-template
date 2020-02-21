@@ -6,17 +6,17 @@ LATEX_TEMPLATE_HTTPS_GIT=https://git.dhbw-stuttgart.de/wi-lab/latex-template.git
 GIT_DEFAULT_BRANCH="feature/module-core"
 
 # Colors
-RESET=$(tput sgr0)
-BU=$(tput smul)
-AQUA=$(tput setaf 14)
-PINK=$(tput setaf 13)
-DARK_AQUA=$(tput setaf 6)
-LIGHT_RED=$(tput setaf 9)
-GREEN=$(tput setaf 82)
-DARK_GREEN=$(tput setaf 2)
-GRAY=$(tput setaf 247)
-BOLD=$(tput bold)
-GOLD=$(tput setaf 11)
+RESET=$(tput sgr0 2>/dev/null)
+BU=$(tput smul 2>/dev/null)
+AQUA=$(tput setaf 14 2>/dev/null)
+PINK=$(tput setaf 13 2>/dev/null)
+DARK_AQUA=$(tput setaf 6 2>/dev/null)
+LIGHT_RED=$(tput setaf 9 2>/dev/null)
+GREEN=$(tput setaf 82 2>/dev/null)
+DARK_GREEN=$(tput setaf 2 2>/dev/null)
+GRAY=$(tput setaf 247 2>/dev/null)
+BOLD=$(tput bold 2>/dev/null)
+GOLD=$(tput setaf 11 2>/dev/null)
 
 # Utility methods
 function cecho() {

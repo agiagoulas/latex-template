@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-GREEN=$(tput setaf 82)
-LIGHT_RED=$(tput setaf 9)
-GRAY=$(tput setaf 247)
-RESET=$(tput sgr0)
+GREEN=$(tput setaf 82 2>/dev/null)
+LIGHT_RED=$(tput setaf 9 2>/dev/null)
+GRAY=$(tput setaf 247 2>/dev/null)
+RESET=$(tput sgr0 2>/dev/null)
 
 (hash pdflatex 2>/dev/null && hash biber 2>/dev/null && hash pdflatex 2>/dev/null)
 found_latex=$?

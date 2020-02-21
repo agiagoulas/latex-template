@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # Colors
-RESET=$(tput sgr0)
-BU=$(tput smul)
-AQUA=$(tput setaf 14)
-DARK_AQUA=$(tput setaf 6)
-LIGHT_RED=$(tput setaf 9)
-GREEN=$(tput setaf 82)
-DARK_GREEN=$(tput setaf 2)
-GRAY=$(tput setaf 247)
-BOLD=$(tput bold)
-GOLD=$(tput setaf 11)
+RESET=$(tput sgr0 2>/dev/null)
+BU=$(tput smul 2>/dev/null)
+AQUA=$(tput setaf 14 2>/dev/null)
+DARK_AQUA=$(tput setaf 6 2>/dev/null)
+LIGHT_RED=$(tput setaf 9 2>/dev/null)
+GREEN=$(tput setaf 82 2>/dev/null)
+DARK_GREEN=$(tput setaf 2 2>/dev/null)
+GRAY=$(tput setaf 247 2>/dev/null)
+BOLD=$(tput bold 2>/dev/null)
+GOLD=$(tput setaf 11 2>/dev/null)
 
 #Module local variables
 function setup_module_vars() {
@@ -164,7 +164,6 @@ function _installModule() {
     # Store root project values
     local local_module_name="${MODULE_NAME}"
     local module_description="${MODULE_DESCRIPTION}"
-    local module_dependencies="${MODULE_DEPENDENCIES}"
     local module_path="$1"
 
     for dep in "${MODULE_DEPENDENCIES_ARRAY[@]}"; do
@@ -178,8 +177,6 @@ function _installModule() {
 
             cur_module_dir=$(_splitBy 1 "${MODULES[i]}") # Get path
             module_id=${cur_module_dir##*/} # only last path
-
-            cecho "Matching ${module_id} against ${dep}"
 
             if [[ "${module_id}" == "${dep}" ]]; then
                 cecho "${GREEN}Found" "!\n"

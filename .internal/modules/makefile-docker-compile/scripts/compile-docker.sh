@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 OUTPUT_DIR=${OUTPUT_DIR:-output}
-GREEN=$(tput setaf 82)
-LIGHT_RED=$(tput setaf 9)
-GRAY=$(tput setaf 247)
-RESET=$(tput sgr0)
+GREEN=$(tput setaf 82 2>/dev/null)
+LIGHT_RED=$(tput setaf 9 2>/dev/null)
+GRAY=$(tput setaf 247 2>/dev/null)
+RESET=$(tput sgr0 2>/dev/null)
 
 if ! hash docker 2>/dev/null; then
     echo -en "${LIGHT_RED}Could not find docker client in path${RESET}!\n"
