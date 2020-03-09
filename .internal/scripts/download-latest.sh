@@ -2,7 +2,7 @@
 # We cannot use the env.sh file, as this download script has to be self contained for accessing it from the git remote
 
 # Hard coded variables
-LATEX_TEMPLATE_HTTPS_GIT=https://git.dhbw-stuttgart.de/wi-lab/latex-template.git
+LATEX_TEMPLATE_HTTPS_GIT=https://github.com/tobias-schwarz/latex-template.git
 GIT_DEFAULT_BRANCH="feature/module-core"
 
 # Colors
